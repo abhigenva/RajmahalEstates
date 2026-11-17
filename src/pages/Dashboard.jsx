@@ -18,6 +18,7 @@ export default function Dashboard() {
   const { user } = useAuth();
   const [myListings, setMyListings] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+  const [imagePreview, setImagePreview] = useState("");
 
   const [formData, setFormData] = useState({
     title: "",
@@ -47,6 +48,34 @@ export default function Dashboard() {
     });
     return () => unsubscribe();
   }, [user]);
+
+  // Add this helper function inside Dashboard.jsx or at the top of the file
+  const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  // Handle file selection or drag and drop
+  const handleImageFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 1024 * 1024 * 2) { // 2MB limit recommended for Firestore doc size
+        alert("Please choose an image under 2MB for optimal performance.");
+        return;
+      }
+      try {
+        const base64String = await convertFileToBase64(file);
+        setImagePreview(base64String);
+        setFormData((prev) => ({ ...prev, imageUrl: base64String }));
+      } catch (err) {
+        console.error("Error converting file:", err);
+      }
+    }
+  };
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -234,15 +263,38 @@ export default function Dashboard() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Image URL</label>
-              <input
-                name="imageUrl"
-                type="url"
-                value={formData.imageUrl}
-                onChange={handleChange}
-                placeholder="https://images.unsplash.com/..."
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
-              />
+              <label className="block text-xs font-semibold text-slate-700 mb-1">Property Image *</label>
+              <div className="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center hover:border-blue-500 transition bg-slate-50 relative">
+                {imagePreview ? (
+                  <div className="relative h-40 w-full rounded-lg overflow-hidden">
+                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setImagePreview("");
+                        setFormData((prev) => ({ ...prev, imageUrl: "" }));
+                      }}
+                      className="absolute top-2 right-2 bg-slate-900/80 text-white text-xs px-2 py-1 rounded-md"
+                    >
+                      Change Image
+                    </button>
+                  </div>
+                ) : (
+                  <label className="cursor-pointer block">
+                    <span className="text-sm font-medium text-slate-700 block mb-1">
+                      Drag & drop property image here, or <span className="text-blue-600 underline">browse</span>
+                    </span>
+                    <span className="text-xs text-slate-400">Supports PNG, JPG, WEBP (Max 2MB)</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      required
+                      onChange={handleImageFileChange}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
             </div>
 
             <div>
