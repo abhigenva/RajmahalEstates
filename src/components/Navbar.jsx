@@ -16,7 +16,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 text-blue-600 font-bold text-xl">
           <Building2 className="w-7 h-7" />
-          <span>EstateFlow</span>
+          <span>Rajmahal Estates</span>
         </Link>
 
         <div className="flex items-center gap-4">

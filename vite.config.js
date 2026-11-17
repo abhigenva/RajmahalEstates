@@ -4,5 +4,5 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/estateflow/', // Change to '/your-repo-name/' for GitHub Pages deployment
+  base: '/RajmahalEstates/', // Change to '/your-repo-name/' for GitHub Pages deployment
 })

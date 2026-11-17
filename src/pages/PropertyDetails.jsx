@@ -230,7 +230,7 @@ export default function PropertyDetails() {
               </div>
               <div>
                 <h4 className="font-bold text-slate-900">{property.agentName}</h4>
-                <p className="text-xs text-slate-500">Verified EstateFlow Partner</p>
+                <p className="text-xs text-slate-500">Verified Partner</p>
               </div>
             </div>
 
