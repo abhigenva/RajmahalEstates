@@ -15,7 +15,7 @@ export default function Footer() {
             <Link to="/" className="flex items-center gap-2.5">
               <Logo className="w-8 h-8" />
               <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">
-                RajMahal<span className="text-blue-600 dark:text-blue-500">Estates</span>
+                Rajmahal<span className="text-blue-600 dark:text-blue-500">Estates</span>
               </span>
             </Link>
             <p className="text-sm leading-relaxed">
@@ -138,7 +138,7 @@ export default function Footer() {
 
         {/* Bottom Copyright & Legal Bar */}
         <div className="border-t border-slate-200 dark:border-slate-800 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <p>© {currentYear} RajMahal Estates. All rights reserved.</p>
+          <p>© {currentYear} Rajmahal Estates. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <span>RERA Compliant Listings</span>
             <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400">
