@@ -8,6 +8,26 @@ const CITIES = ["All", "Jaipur", "Mumbai", "Bangalore", "Delhi", "Pune"];
 const TYPES = ["All", "Residential", "Plot", "Commercial"];
 const CATEGORIES = ["All", "Sale", "Rent"];
 
+const MIN_PRICE_OPTIONS = [
+  { label: "Min Price", value: "" },
+  { label: "₹15 Lakh", value: "1500000" },
+  { label: "₹25 Lakh", value: "2500000" },
+  { label: "₹50 Lakh", value: "5000000" },
+  { label: "₹75 Lakh", value: "7500000" },
+  { label: "₹1 Crore", value: "10000000" },
+  { label: "₹2 Crore", value: "20000000" },
+];
+
+const MAX_PRICE_OPTIONS = [
+  { label: "Max Price", value: "" },
+  { label: "₹25 Lakh", value: "2500000" },
+  { label: "₹50 Lakh", value: "5000000" },
+  { label: "₹75 Lakh", value: "7500000" },
+  { label: "₹1 Crore", value: "10000000" },
+  { label: "₹2 Crore", value: "20000000" },
+  { label: "₹5 Crore", value: "50000000" },
+];
+
 export default function Home() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,6 +40,7 @@ export default function Home() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [minBedrooms, setMinBedrooms] = useState("All");
+  const [selectedBhk, setSelectedBhk] = useState("All");
   const [sortBy, setSortBy] = useState("newest");
 
   useEffect(() => {
@@ -45,7 +66,6 @@ export default function Home() {
 
   const processedProperties = properties
   .filter((item) => {
-    // 1. Keyword Search (Title, City, or Address)
     const queryLower = searchQuery.toLowerCase();
     const matchesSearch =
       !queryLower ||
@@ -53,20 +73,25 @@ export default function Home() {
       item.city?.toLowerCase().includes(queryLower) ||
       item.address?.toLowerCase().includes(queryLower);
 
-    // 2. Dropdown Filters
     const matchesCity = selectedCity === "All" || item.city === selectedCity;
     const matchesType = selectedType === "All" || item.type === selectedType;
     const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
 
-    // 3. Price Range Filter
     const itemPrice = Number(item.price) || 0;
     const matchesMinPrice = !minPrice || itemPrice >= Number(minPrice);
     const matchesMaxPrice = !maxPrice || itemPrice <= Number(maxPrice);
 
-    // 4. Bedroom Filter (Applies only if Residential or a specific count is chosen)
-    const matchesBeds =
-      minBedrooms === "All" ||
-      (item.type === "Residential" && Number(item.bedrooms) >= Number(minBedrooms));
+    const beds = Number(item.bedrooms) || 0;
+    let matchesBhk = true;
+    if (selectedBhk !== "All") {
+      if (item.type !== "Residential") {
+        matchesBhk = false;
+      } else if (selectedBhk === "4+") {
+        matchesBhk = beds >= 4;
+      } else {
+        matchesBhk = beds === Number(selectedBhk);
+      }
+    }
 
     return (
       matchesSearch &&
@@ -75,7 +100,7 @@ export default function Home() {
       matchesCategory &&
       matchesMinPrice &&
       matchesMaxPrice &&
-      matchesBeds
+      matchesBhk
     );
   })
   .sort((a, b) => {
@@ -88,7 +113,6 @@ export default function Home() {
     if (sortBy === "area-desc") {
       return (Number(b.area) || 0) - (Number(a.area) || 0);
     }
-    // Default: "newest" (preserves Firestore createdAt desc order)
     return 0;
   });
 
@@ -99,7 +123,7 @@ const resetFilters = () => {
   setSelectedCategory("All");
   setMinPrice("");
   setMaxPrice("");
-  setMinBedrooms("All");
+  setSelectedBhk("All");
   setSortBy("newest");
 };
 
@@ -196,40 +220,52 @@ const resetFilters = () => {
               <SlidersHorizontal className="w-4 h-4" /> Filters:
             </span>
 
-            {/* Min Price */}
-            <input
-              type="number"
-              placeholder="Min Price (₹)"
+            {/* Min Price Dropdown */}
+            <select
+              aria-label="Minimum Price"
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
-              className="w-36 px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+              className="px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {MIN_PRICE_OPTIONS.map((opt) => (
+                <option key={opt.label} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
 
-            {/* Max Price */}
-            <input
-              type="number"
-              placeholder="Max Price (₹)"
+            {/* Max Price Dropdown */}
+            <select
+              aria-label="Maximum Price"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-36 px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+              className="px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {MAX_PRICE_OPTIONS.map((opt) => (
+                <option key={opt.label} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
 
-            {/* Bedrooms (Only active when Type is All or Residential) */}
+            {/* BHK Dropdown (Any BHK + Exact 1, 2, 3 BHK + 4+ BHK) */}
             <select
-              value={minBedrooms}
+              aria-label="BHK Filter"
+              value={selectedBhk}
               disabled={selectedType === "Plot" || selectedType === "Commercial"}
-              onChange={(e) => setMinBedrooms(e.target.value)}
+              onChange={(e) => setSelectedBhk(e.target.value)}
               className="px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-40"
             >
               <option value="All">Any BHK</option>
-              <option value="1">1+ BHK</option>
-              <option value="2">2+ BHK</option>
-              <option value="3">3+ BHK</option>
-              <option value="4">4+ BHK</option>
+              <option value="1">Only 1 BHK</option>
+              <option value="2">Only 2 BHK</option>
+              <option value="3">Only 3 BHK</option>
+              <option value="4+">4+ BHK</option>
             </select>
 
             {/* Reset Button */}
             <button
+              type="button"
               onClick={resetFilters}
               className="text-xs font-semibold text-slate-500 hover:text-red-600 px-2 py-1.5 transition"
             >
