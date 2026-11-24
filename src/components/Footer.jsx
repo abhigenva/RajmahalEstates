@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { MapPin, Phone, Mail, Instagram, Linkedin, Twitter, Facebook } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
+import { FaInstagram, FaLinkedinIn, FaTwitter, FaFacebookF } from "react-icons/fa";
 import Logo from "./Logo";
 
 export default function Footer() {
@@ -29,7 +30,7 @@ export default function Footer() {
                 aria-label="Instagram"
                 className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white transition"
               >
-                <Instagram className="w-4 h-4" />
+                <FaInstagram className="w-4 h-4" />
               </a>
               <a
                 href="https://linkedin.com"
@@ -38,7 +39,7 @@ export default function Footer() {
                 aria-label="LinkedIn"
                 className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white transition"
               >
-                <Linkedin className="w-4 h-4" />
+                <FaLinkedinIn className="w-4 h-4" />
               </a>
               <a
                 href="https://twitter.com"
@@ -47,7 +48,7 @@ export default function Footer() {
                 aria-label="Twitter / X"
                 className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white transition"
               >
-                <Twitter className="w-4 h-4" />
+                <FaTwitter className="w-4 h-4" />
               </a>
               <a
                 href="https://facebook.com"
@@ -56,7 +57,7 @@ export default function Footer() {
                 aria-label="Facebook"
                 className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-600 hover:text-white dark:hover:bg-blue-600 dark:hover:text-white transition"
               >
-                <Facebook className="w-4 h-4" />
+                <FaFacebookF className="w-4 h-4" />
               </a>
             </div>
           </div>
