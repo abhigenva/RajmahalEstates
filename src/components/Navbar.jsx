@@ -20,7 +20,7 @@ export default function Navbar() {
         <Link to="/" className="flex items-center gap-2.5 group">
           <Logo className="w-8 h-8 shadow-sm group-hover:scale-105 transition-transform" />
           <span className="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">
-            Estate<span className="text-blue-600 dark:text-blue-500">Flow</span>
+            Rajmahal<span className="text-blue-600 dark:text-blue-500">Estates</span>
           </span>
         </Link>
 

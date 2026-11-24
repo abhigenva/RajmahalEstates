@@ -225,7 +225,7 @@ const resetFilters = () => {
               aria-label="Minimum Price"
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
-              className="px-3 py-2 text-sm bg-slate-50 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 text-sm bg-slate-50 dark:bg-slate-600 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {MIN_PRICE_OPTIONS.map((opt) => (
                 <option key={opt.label} value={opt.value}>
