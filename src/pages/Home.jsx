@@ -130,17 +130,17 @@ const resetFilters = () => {
   return (
     <div>
       {/* Hero & Search Section */}
-      <section className="bg-slate-900 text-white py-16 px-4">
+      <section className="bg-slate-900 dark:bg-slate-800 text-white dark:text-slate-300 py-16 px-4">
         <div className="max-w-5xl mx-auto text-center">
           <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight mb-4">
             Find Your Next Home, Plot, or Commercial Space
           </h1>
-          <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
+          <p className="text-slate-300 dark:text-slate-400 text-lg mb-8 max-w-2xl mx-auto">
             Browse verified real-time listings across India’s top growing cities directly from certified agents.
           </p>
 
           {/* Filter Bar */}
-          <div className="bg-white p-3 rounded-2xl shadow-xl text-slate-800 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+          <div className="bg-white dark:bg-slate-800 p-3 rounded-2xl shadow-xl text-slate-800 dark:text-slate-300 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             <div className="relative lg:col-span-2 flex items-center">
               <Search className="w-5 h-5 text-slate-400 absolute left-3" />
               <input
@@ -148,14 +148,14 @@ const resetFilters = () => {
                 placeholder="Search title, locality, landmark..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-3 py-2.5 bg-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-10 pr-3 py-2.5 bg-slate-100 dark:bg-slate-600 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             <select
               value={selectedCity}
               onChange={(e) => setSelectedCity(e.target.value)}
-              className="px-3 py-2.5 bg-slate-100 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2.5 bg-slate-100 dark:bg-slate-600 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {CITIES.map((c) => (
                 <option key={c} value={c}>
@@ -167,7 +167,7 @@ const resetFilters = () => {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="px-3 py-2.5 bg-slate-100 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2.5 bg-slate-100 dark:bg-slate-600 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {TYPES.map((t) => (
                 <option key={t} value={t}>
@@ -179,7 +179,7 @@ const resetFilters = () => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-3 py-2.5 bg-slate-100 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2.5 bg-slate-100 dark:bg-slate-600 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {CATEGORIES.map((cat) => (
                 <option key={cat} value={cat}>
@@ -195,7 +195,7 @@ const resetFilters = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* City Quick Links */}
         <div className="flex flex-wrap items-center gap-2 mb-6">
-          <span className="text-sm font-semibold text-slate-500 mr-1 flex items-center gap-1">
+          <span className="text-sm font-semibold text-slate-500 dark:text-slate-400 mr-1 flex items-center gap-1">
             <MapPin className="w-4 h-4" /> Explore Cities:
           </span>
           {CITIES.map((city) => (
@@ -204,8 +204,8 @@ const resetFilters = () => {
               onClick={() => setSelectedCity(city)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
                 selectedCity === city
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-white text-slate-600 border border-slate-200 hover:border-blue-400"
+                  ? "bg-blue-600 dark:bg-blue-500 text-white dark:text-white shadow-sm"
+                  : "bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-600 hover:border-blue-400"
               }`}
             >
               {city}
@@ -214,9 +214,9 @@ const resetFilters = () => {
         </div>
 
         {/* Advanced Filters & Sort Toolbar */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div className="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-200 dark:border-slate-600 shadow-sm mb-8 flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 flex items-center gap-1">
               <SlidersHorizontal className="w-4 h-4" /> Filters:
             </span>
 
@@ -225,7 +225,7 @@ const resetFilters = () => {
               aria-label="Minimum Price"
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
-              className="px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 text-sm bg-slate-50 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {MIN_PRICE_OPTIONS.map((opt) => (
                 <option key={opt.label} value={opt.value}>
@@ -239,7 +239,7 @@ const resetFilters = () => {
               aria-label="Maximum Price"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
-              className="px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 text-sm bg-slate-50 dark:bg-slate-600 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-slate-300"
             >
               {MAX_PRICE_OPTIONS.map((opt) => (
                 <option key={opt.label} value={opt.value}>
@@ -254,7 +254,7 @@ const resetFilters = () => {
               value={selectedBhk}
               disabled={selectedType === "Plot" || selectedType === "Commercial"}
               onChange={(e) => setSelectedBhk(e.target.value)}
-              className="px-3 py-2 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-40"
+              className="px-3 py-2 text-sm bg-slate-50 dark:bg-slate-600 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-slate-300"
             >
               <option value="All">Any BHK</option>
               <option value="1">Only 1 BHK</option>
@@ -267,7 +267,7 @@ const resetFilters = () => {
             <button
               type="button"
               onClick={resetFilters}
-              className="text-xs font-semibold text-slate-500 hover:text-red-600 px-2 py-1.5 transition"
+              className="text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 px-2 py-1.5 transition"
             >
               Clear All
             </button>
@@ -275,14 +275,14 @@ const resetFilters = () => {
 
           {/* Sort Dropdown */}
           <div className="flex items-center gap-2">
-            <label htmlFor="sort-select" className="text-xs font-semibold text-slate-500">
+            <label htmlFor="sort-select" className="text-xs font-semibold text-slate-500 dark:text-slate-400">
               Sort by:
             </label>
             <select
               id="sort-select"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-3 py-2 text-sm font-medium bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="px-3 py-2 text-sm font-medium bg-slate-50 dark:bg-slate-600 border border-slate-200 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-slate-300"
             >
               <option value="newest">Newest First</option>
               <option value="price-asc">Price: Low to High</option>
@@ -294,7 +294,7 @@ const resetFilters = () => {
 
         {/* Listings Header */}
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-slate-800">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-300">
             Available Properties ({processedProperties.length})
           </h2>
         </div>
@@ -306,11 +306,11 @@ const resetFilters = () => {
             ))}
           </div>
         ) : processedProperties.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-slate-200">
-            <p className="text-slate-500 text-lg font-medium">No properties match your filters.</p>
+          <div className="text-center py-20 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-600">
+            <p className="text-slate-500 dark:text-slate-400 text-lg font-medium">No properties match your filters.</p>
             <button
               onClick={resetFilters}
-              className="mt-4 text-blue-600 font-semibold text-sm hover:underline"
+              className="mt-4 text-blue-600 dark:text-blue-400 font-semibold text-sm hover:underline"
             >
               Reset all filters
             </button>

@@ -124,8 +124,8 @@ export default function Dashboard() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">Agent Dashboard</h1>
-        <p className="text-sm text-slate-500">Logged in as {user?.email}</p>
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Agent Dashboard</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">Logged in as {user?.email}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -133,32 +133,32 @@ export default function Dashboard() {
         <div className="lg:col-span-5">
           <form
             onSubmit={handleAddProperty}
-            className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4"
+            className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 shadow-sm space-y-4"
           >
-            <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
               <PlusCircle className="w-5 h-5 text-blue-600" /> List New Property
             </h2>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Property Title *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Property Title *</label>
               <input
                 name="title"
                 required
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="e.g., Luxury 3BHK Villa in Vaishali Nagar"
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">City *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">City *</label>
                 <select
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
                 >
                   <option value="Jaipur">Jaipur</option>
                   <option value="Mumbai">Mumbai</option>
@@ -169,7 +169,7 @@ export default function Dashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Price (₹) *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Price (₹) *</label>
                 <input
                   name="price"
                   type="number"
@@ -177,19 +177,19 @@ export default function Dashboard() {
                   value={formData.price}
                   onChange={handleChange}
                   placeholder="8500000"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Property Type</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Property Type</label>
                 <select
                   name="type"
                   value={formData.type}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
                 >
                   <option value="Residential">Residential</option>
                   <option value="Plot">Plot</option>
@@ -198,12 +198,12 @@ export default function Dashboard() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Listing Category</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Listing Category</label>
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
                 >
                   <option value="Sale">Sale</option>
                   <option value="Rent">Rent</option>
@@ -213,7 +213,7 @@ export default function Dashboard() {
 
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Area (SqFt) *</label>
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Area (SqFt) *</label>
                 <input
                   name="area"
                   type="number"
@@ -221,30 +221,30 @@ export default function Dashboard() {
                   value={formData.area}
                   onChange={handleChange}
                   placeholder="1800"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
                 />
               </div>
 
               {formData.type === "Residential" && (
                 <>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Beds</label>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Beds</label>
                     <input
                       name="bedrooms"
                       type="number"
                       value={formData.bedrooms}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">Baths</label>
+                    <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Baths</label>
                     <input
                       name="bathrooms"
                       type="number"
                       value={formData.bathrooms}
                       onChange={handleChange}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                      className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
                     />
                   </div>
                 </>
@@ -252,19 +252,19 @@ export default function Dashboard() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Full Address / Locality</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Full Address / Locality</label>
               <input
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
                 placeholder="Sector 4, Vaishali Nagar"
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Property Image *</label>
-              <div className="border-2 border-dashed border-slate-300 rounded-xl p-4 text-center hover:border-blue-500 transition bg-slate-50 relative">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Property Image *</label>
+              <div className="border-2 border-dashed border-slate-300 dark:border-slate-600 rounded-xl p-4 text-center hover:border-blue-500 transition bg-slate-50 relative">
                 {imagePreview ? (
                   <div className="relative h-40 w-full rounded-lg overflow-hidden">
                     <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
@@ -274,17 +274,17 @@ export default function Dashboard() {
                         setImagePreview("");
                         setFormData((prev) => ({ ...prev, imageUrl: "" }));
                       }}
-                      className="absolute top-2 right-2 bg-slate-900/80 text-white text-xs px-2 py-1 rounded-md"
+                      className="absolute top-2 right-2 bg-slate-900/80 dark:bg-slate-600 text-white dark:text-slate-300 text-xs px-2 py-1 rounded-md"
                     >
                       Change Image
                     </button>
                   </div>
                 ) : (
                   <label className="cursor-pointer block">
-                    <span className="text-sm font-medium text-slate-700 block mb-1">
+                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300 block mb-1">
                       Drag & drop property image here, or <span className="text-blue-600 underline">browse</span>
                     </span>
-                    <span className="text-xs text-slate-400">Supports PNG, JPG, WEBP (Max 2MB)</span>
+                    <span className="text-xs text-slate-400 dark:text-slate-500">Supports PNG, JPG, WEBP (Max 2MB)</span>
                     <input
                       type="file"
                       accept="image/*"
@@ -298,19 +298,19 @@ export default function Dashboard() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                 Amenities (comma separated)
               </label>
               <input
                 name="amenities"
                 value={formData.amenities}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">Description *</label>
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Description *</label>
               <textarea
                 name="description"
                 required
@@ -318,12 +318,12 @@ export default function Dashboard() {
                 value={formData.description}
                 onChange={handleChange}
                 placeholder="Describe key features, nearby landmarks, facing..."
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
               />
             </div>
 
-            <div className="pt-2 border-t border-slate-100 space-y-3">
-              <p className="text-xs font-bold text-slate-500 uppercase">Agent Contact Details</p>
+            <div className="pt-2 border-t border-slate-100 dark:border-slate-600 space-y-3">
+              <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase">Agent Contact Details</p>
               <div className="grid grid-cols-2 gap-3">
                 <input
                   name="agentName"
@@ -331,7 +331,7 @@ export default function Dashboard() {
                   value={formData.agentName}
                   onChange={handleChange}
                   placeholder="Your Name *"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
                 />
                 <input
                   name="agentPhone"
@@ -339,7 +339,7 @@ export default function Dashboard() {
                   value={formData.agentPhone}
                   onChange={handleChange}
                   placeholder="Phone (+91...) *"
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
+                  className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm"
                 />
               </div>
             </div>
@@ -347,7 +347,7 @@ export default function Dashboard() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition"
+              className="w-full py-2.5 bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white font-semibold rounded-xl text-sm transition"
             >
               {submitting ? "Publishing..." : "Publish Property Live"}
             </button>
@@ -356,13 +356,13 @@ export default function Dashboard() {
 
         {/* Agent's Active Listings */}
         <div className="lg:col-span-7">
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-            <h2 className="text-lg font-bold text-slate-900 mb-4">
+          <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200 dark:border-slate-600 shadow-sm">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-slate-300 mb-4">
               My Active Listings ({myListings.length})
             </h2>
 
             {myListings.length === 0 ? (
-              <p className="text-sm text-slate-500 py-10 text-center">
+              <p className="text-sm text-slate-500 dark:text-slate-400 py-10 text-center">
                 You haven’t listed any properties yet. Use the form on the left to publish your first listing.
               </p>
             ) : (
@@ -370,7 +370,7 @@ export default function Dashboard() {
                 {myListings.map((item) => (
                   <div
                     key={item.id}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border border-slate-200 hover:border-slate-300 transition"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-slate-300 dark:hover:border-slate-500 transition"
                   >
                     <div className="flex items-center gap-4">
                       <img
@@ -379,11 +379,11 @@ export default function Dashboard() {
                           "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=200&q=60"
                         }
                         alt={item.title}
-                        className="w-16 h-16 rounded-lg object-cover bg-slate-100 shrink-0"
+                        className="w-16 h-16 rounded-lg object-cover bg-slate-100 dark:bg-slate-600 shrink-0"
                       />
                       <div>
-                        <h4 className="font-bold text-slate-900 text-sm">{item.title}</h4>
-                        <p className="text-xs text-slate-500">
+                        <h4 className="font-bold text-slate-900 dark:text-slate-300 text-sm">{item.title}</h4>
+                        <p className="text-xs text-slate-500 dark:text-slate-400">
                           {item.city} • {item.type} ({item.category}) • ₹
                           {Number(item.price).toLocaleString("en-IN")}
                         </p>
@@ -393,14 +393,14 @@ export default function Dashboard() {
                     <div className="flex items-center gap-2 self-end sm:self-center">
                       <Link
                         to={`/property/${item.id}`}
-                        className="p-2 text-slate-600 hover:text-blue-600 bg-slate-100 rounded-lg"
+                        className="p-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 bg-slate-100 dark:bg-slate-600 rounded-lg"
                         title="View Public Page"
                       >
                         <ExternalLink className="w-4 h-4" />
                       </Link>
                       <button
                         onClick={() => handleDelete(item.id)}
-                        className="p-2 text-red-600 hover:bg-red-50 bg-slate-100 rounded-lg"
+                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-600 bg-slate-100 dark:bg-slate-600 rounded-lg"
                         title="Delete Listing"
                       >
                         <Trash2 className="w-4 h-4" />

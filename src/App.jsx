@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import PropertyDetails from "./pages/PropertyDetails";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
@@ -13,27 +14,29 @@ function ProtectedRoute({ children }) {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
-        <div className="min-h-screen flex flex-col">
-          <Navbar />
-          <div className="flex-1">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/property/:id" element={<PropertyDetails />} />
-              <Route path="/login" element={<Login />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
+    <ThemeProvider>
+      <AuthProvider>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <div className="min-h-screen flex flex-col">
+            <Navbar />
+            <div className="flex-1">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/property/:id" element={<PropertyDetails />} />
+                <Route path="/login" element={<Login />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </div>
           </div>
-        </div>
-      </BrowserRouter>
-    </AuthProvider>
+        </BrowserRouter>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
