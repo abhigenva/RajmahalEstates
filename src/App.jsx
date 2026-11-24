@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import PropertyDetails from "./pages/PropertyDetails";
 import Login from "./pages/Login";
@@ -34,6 +35,7 @@ export default function App() {
                 />
               </Routes>
             </div>
+            <Footer />
           </div>
         </BrowserRouter>
       </AuthProvider>
