@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
+import { useAuth } from "../context/AuthContext";
 import { db } from "../firebase";
 import {
   MapPin,
+  Pencil,
+  Trash2,
   BedDouble,
   Bath,
   Maximize,
@@ -21,6 +24,17 @@ export default function PropertyDetails() {
   const [property, setProperty] = useState(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+
+  const { user, isSuperAgent } = useAuth();
+  const navigate = useNavigate();
+
+  const isOwner = Boolean(user && property?.agentId === user.uid);
+
+  const handleDeleteListing = async () => {
+    if (!window.confirm("Delete this property listing permanently?")) return;
+    await deleteDoc(doc(db, "properties", property.id));
+    navigate("/dashboard");
+  };
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -98,7 +112,24 @@ export default function PropertyDetails() {
         >
           <ArrowLeft className="w-4 h-4" /> Back to Listings
         </Link>
+        {isOwner && (
+          <Link
+            to={`/dashboard?edit=${property.id}`}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-semibold shadow-sm transition"
+          >
+            <Pencil className="w-4 h-4" /> Edit Listing
+          </Link>
+        )}
 
+        {(isOwner || isSuperAgent) && (
+          <button
+            onClick={handleDeleteListing}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-semibold shadow-sm transition"
+          >
+            <Trash2 className="w-4 h-4" />
+            {isOwner ? "Delete" : "Remove Unverified"}
+          </button>
+        )}
         <button
           onClick={handleShare}
           className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600 shadow-sm transition"
