@@ -112,24 +112,26 @@ export default function PropertyDetails() {
         >
           <ArrowLeft className="w-4 h-4" /> Back to Listings
         </Link>
-        {isOwner && (
-          <Link
-            to={`/dashboard?edit=${property.id}`}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-sm font-semibold shadow-sm transition"
-          >
-            <Pencil className="w-4 h-4" /> Edit Listing
-          </Link>
-        )}
+        <div className="flex items-center gap-2">
+          {isOwner && (
+            <Link
+              to={`/dashboard?edit=${property.id}`}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-amber-500 dark:bg-amber-600 hover:bg-amber-600 dark:hover:bg-amber-700 text-white rounded-lg text-sm font-semibold shadow-sm transition"
+            >
+              <Pencil className="w-4 h-4" /> Edit Listing
+            </Link>
+          )}
 
-        {(isOwner || isSuperAgent) && (
-          <button
-            onClick={handleDeleteListing}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-sm font-semibold shadow-sm transition"
-          >
-            <Trash2 className="w-4 h-4" />
-            {isOwner ? "Delete" : "Remove Unverified"}
-          </button>
-        )}
+          {(isOwner || isSuperAgent) && (
+            <button
+              onClick={handleDeleteListing}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-red-600 dark:bg-red-600 hover:bg-red-700 dark:hover:bg-red-700 text-white rounded-lg text-sm font-semibold shadow-sm transition"
+            >
+              <Trash2 className="w-4 h-4" />
+              {isOwner ? "Delete" : "Remove Unverified"}
+            </button>
+          )}
+        </div>
         <button
           onClick={handleShare}
           className="inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600 shadow-sm transition"
