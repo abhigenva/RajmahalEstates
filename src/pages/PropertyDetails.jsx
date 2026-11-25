@@ -171,7 +171,7 @@ export default function PropertyDetails() {
               <span className="px-3 py-1 bg-blue-50 dark:bg-blue-600 text-blue-700 dark:text-blue-400 text-xs font-bold rounded-full">
                 For {property.category}
               </span>
-              <span className="px-3 py-1 bg-slate-100 dark:bg-slate-600 text-slate-700 dark:text-slate-300 text-xs font-bold rounded-full">
+              <span className="px-3 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-full">
                 {property.type}
               </span>
             </div>
