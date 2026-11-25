@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MapPin, BedDouble, Bath, Maximize, ArrowUpRight } from "lucide-react";
+import { MapPin, BedDouble, Bath, Maximize, ArrowUpRight, Images } from "lucide-react";
 
 export default function PropertyCard({ property }) {
   const formatPrice = (price) => {
@@ -9,18 +9,27 @@ export default function PropertyCard({ property }) {
       maximumFractionDigits: 0,
     }).format(price);
   };
+  const coverImage =
+    property.images?.[0] ||
+    property.imageUrl ||
+    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80";
+
+  const photoCount = Array.isArray(property.images) ? property.images.length : property.imageUrl ? 1 : 0;
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition group flex flex-col">
       <div className="relative h-52 overflow-hidden bg-slate-200 dark:bg-slate-800">
         <img
-          src={
-            property.imageUrl ||
-            "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80"
-          }
+          src={coverImage}
           alt={property.title}
           className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
         />
+
+        {photoCount > 1 && (
+          <span className="absolute bottom-3 right-3 px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-900/80 text-white backdrop-blur-sm flex items-center gap-1">
+            <Images className="w-3.5 h-3.5" /> {photoCount}
+          </span>
+        )}
         <div className="absolute top-3 left-3 flex gap-2">
           <span className="px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-900/80 dark:bg-blue-600 text-white dark:text-slate-900 backdrop-blur-sm">
             {property.type}

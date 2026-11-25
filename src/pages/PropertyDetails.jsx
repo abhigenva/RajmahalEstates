@@ -17,6 +17,8 @@ import {
   ArrowLeft,
   Building,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 export default function PropertyDetails() {
@@ -27,6 +29,15 @@ export default function PropertyDetails() {
 
   const { user, isSuperAgent } = useAuth();
   const navigate = useNavigate();
+
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const galleryImages =
+    Array.isArray(property?.images) && property.images.length > 0
+      ? property.images
+      : property?.imageUrl
+      ? [property.imageUrl]
+      : ["https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80"];
 
   const isOwner = Boolean(user && property?.agentId === user.uid);
 
@@ -150,16 +161,65 @@ export default function PropertyDetails() {
         </button>
       </div>
 
-      {/* Hero Image */}
-      <div className="rounded-2xl overflow-hidden bg-slate-200 dark:bg-slate-600 h-[320px] sm:h-[460px] mb-8 shadow-sm">
-        <img
-          src={
-            property.imageUrl ||
-            "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80"
-          }
-          alt={property.title}
-          className="w-full h-full object-cover"
-        />
+      {/* Interactive Image Gallery */}
+      <div className="mb-8 space-y-3">
+        <div className="relative rounded-2xl overflow-hidden bg-slate-200 dark:bg-slate-800 h-[320px] sm:h-[480px] shadow-sm group">
+          <img
+            src={galleryImages[activeImageIndex]}
+            alt={`${property.title} - Photo ${activeImageIndex + 1}`}
+            className="w-full h-full object-cover transition duration-300"
+          />
+
+          {galleryImages.length > 1 && (
+            <>
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveImageIndex((prev) => (prev === 0 ? galleryImages.length - 1 : prev - 1))
+                }
+                aria-label="Previous image"
+                className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/70 hover:bg-slate-900 text-white transition opacity-90 sm:opacity-0 sm:group-hover:opacity-100"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveImageIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1))
+                }
+                aria-label="Next image"
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-slate-900/70 hover:bg-slate-900 text-white transition opacity-90 sm:opacity-0 sm:group-hover:opacity-100"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+
+              <span className="absolute bottom-3 right-3 px-3 py-1 rounded-full bg-slate-900/80 text-white text-xs font-semibold backdrop-blur-sm">
+                {activeImageIndex + 1} / {galleryImages.length}
+              </span>
+            </>
+          )}
+        </div>
+
+        {/* Thumbnail Strip */}
+        {galleryImages.length > 1 && (
+          <div className="grid grid-cols-5 gap-2.5">
+            {galleryImages.map((imgUrl, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setActiveImageIndex(idx)}
+                className={`relative h-16 sm:h-20 rounded-xl overflow-hidden border-2 transition ${
+                  activeImageIndex === idx
+                    ? "border-blue-600 ring-2 ring-blue-500/30"
+                    : "border-transparent opacity-70 hover:opacity-100"
+                }`}
+              >
+                <img src={imgUrl} alt={`Thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Two-Column Content */}

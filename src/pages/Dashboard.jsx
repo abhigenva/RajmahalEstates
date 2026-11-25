@@ -16,6 +16,28 @@ import { useAuth } from "../context/AuthContext";
 import { PlusCircle, Pencil, Trash2, ExternalLink, ShieldAlert, X } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 
+const compressImageToBase64 = (file, maxWidth = 1000, quality = 0.7) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const scale = Math.min(1, maxWidth / img.width);
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = reject;
+    };
+    reader.onerror = reject;
+  });
+
 const INITIAL_FORM = (email = "") => ({
   title: "",
   description: "",
@@ -28,6 +50,7 @@ const INITIAL_FORM = (email = "") => ({
   bathrooms: "2",
   area: "",
   imageUrl: "",
+  images:[],
   amenities: "Parking, 24/7 Security, Power Backup",
   agentName: "",
   agentPhone: "",
@@ -82,20 +105,51 @@ export default function Dashboard() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleImageFileChange = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.size > 1024 * 1024 * 2) {
-      alert("Please choose an image under 2MB.");
+  const handleImagesChange = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+
+    const remainingSlots = 5 - formData.images.length;
+    if (remainingSlots <= 0) {
+      alert("Maximum 5 images allowed per property.");
       return;
     }
-    const base64String = await convertFileToBase64(file);
-    setImagePreview(base64String);
-    setFormData((prev) => ({ ...prev, imageUrl: base64String }));
+
+    const filesToProcess = files.slice(0, remainingSlots);
+    if (files.length > remainingSlots) {
+      alert(`Only ${remainingSlots} more image(s) can be added (max 5 total).`);
+    }
+
+    try {
+      const compressedList = await Promise.all(
+        filesToProcess.map((file) => compressImageToBase64(file))
+      );
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, ...compressedList],
+      }));
+    } catch (err) {
+      console.error("Error compressing images:", err);
+      alert("Failed to process one or more images.");
+    }
+    e.target.value = ""; // Reset input so the same file can be re-selected if removed
+  };
+
+  const removeImage = (indexToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: prev.images.filter((_, idx) => idx !== indexToRemove),
+    }));
   };
 
   const startEditing = (property) => {
     // Guard: only the owner can edit
+    const existingImages =
+      Array.isArray(property.images) && property.images.length > 0
+        ? property.images
+        : property.imageUrl
+        ? [property.imageUrl]
+        : [];
     if (property.agentId !== user.uid) return;
     setEditingId(property.id);
     setImagePreview(property.imageUrl || "");
@@ -111,6 +165,7 @@ export default function Dashboard() {
       bathrooms: String(property.bathrooms || "2"),
       area: String(property.area || ""),
       imageUrl: property.imageUrl || "",
+      images: existingImages,
       amenities: Array.isArray(property.amenities) ? property.amenities.join(", ") : "",
       agentName: property.agentName || "",
       agentPhone: property.agentPhone || "",
@@ -131,6 +186,7 @@ export default function Dashboard() {
 
     const payload = {
       ...formData,
+      imageUrl: formData.images[0] || "",
       price: Number(formData.price),
       area: Number(formData.area),
       bedrooms: formData.type === "Residential" ? Number(formData.bedrooms) : 0,
@@ -364,40 +420,64 @@ export default function Dashboard() {
               />
             </div>
 
-            {/* Drag & Drop Image Upload */}
+            {/* Multi-Image Uploader (Up to 5 Images) */}
             <div>
-              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                Property Image
-              </label>
-              <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-4 text-center bg-slate-50 dark:bg-slate-800/50">
-                {imagePreview ? (
-                  <div className="relative h-36 w-full rounded-lg overflow-hidden">
-                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setImagePreview("");
-                        setFormData((prev) => ({ ...prev, imageUrl: "" }));
-                      }}
-                      className="absolute top-2 right-2 bg-slate-900/80 text-white text-xs px-2 py-1 rounded-md"
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  Property Images ({formData.images.length}/5)
+                </label>
+                {formData.images.length > 0 && (
+                  <span className="text-[11px] text-slate-400">First image is the cover photo</span>
+                )}
+              </div>
+
+              {/* Thumbnail Grid of Uploaded Images */}
+              {formData.images.length > 0 && (
+                <div className="grid grid-cols-3 gap-2.5 mb-2.5">
+                  {formData.images.map((imgSrc, idx) => (
+                    <div
+                      key={idx}
+                      className="relative h-24 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-700 group"
                     >
-                      Change Image
-                    </button>
-                  </div>
-                ) : (
+                      <img src={imgSrc} alt={`Upload ${idx + 1}`} className="w-full h-full object-cover" />
+                      {idx === 0 && (
+                        <span className="absolute bottom-1 left-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">
+                          Cover
+                        </span>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => removeImage(idx)}
+                        className="absolute top-1 right-1 bg-slate-900/80 hover:bg-red-600 text-white p-1 rounded-md transition"
+                        title="Remove image"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Add More Dropzone (Hidden once 5 images are added) */}
+              {formData.images.length < 5 && (
+                <div className="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-4 text-center bg-slate-50 dark:bg-slate-800/50 hover:border-blue-500 transition">
                   <label className="cursor-pointer block">
                     <span className="text-xs font-medium text-slate-700 dark:text-slate-300 block mb-1">
-                      Click to upload or drag & drop image (Max 2MB)
+                      Click to select or drag & drop images ({5 - formData.images.length} remaining)
+                    </span>
+                    <span className="text-[11px] text-slate-400">
+                      Select multiple files at once • Auto-optimized for fast loading
                     </span>
                     <input
                       type="file"
                       accept="image/*"
-                      onChange={handleImageFileChange}
+                      multiple
+                      onChange={handleImagesChange}
                       className="hidden"
                     />
                   </label>
-                )}
-              </div>
+                </div>
+              )}
             </div>
 
             <div>
