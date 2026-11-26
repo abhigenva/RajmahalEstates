@@ -8,6 +8,8 @@ const CITIES = ["All", "Jaipur", "Mumbai", "Bangalore", "Delhi", "Pune"];
 const TYPES = ["All", "Residential", "Plot", "Commercial"];
 const CATEGORIES = ["All", "Sale", "Rent"];
 
+const ITEMS_PER_PAGE = 6;
+
 const MIN_PRICE_OPTIONS = [
   { label: "Min Price", value: "" },
   { label: "₹15 Lakh", value: "1500000" },
@@ -42,6 +44,12 @@ export default function Home() {
   const [minBedrooms, setMinBedrooms] = useState("All");
   const [selectedBhk, setSelectedBhk] = useState("All");
   const [sortBy, setSortBy] = useState("newest");
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCity, selectedType, selectedCategory, minPrice, maxPrice, selectedBhk, sortBy]);
 
   useEffect(() => {
     const q = query(collection(db, "properties"), orderBy("createdAt", "desc"));
@@ -115,6 +123,11 @@ export default function Home() {
     }
     return 0;
   });
+
+const totalPages = Math.max(1, Math.ceil(processedProperties.length / ITEMS_PER_PAGE));
+const safePage = Math.min(currentPage, totalPages);
+const startIndex = (safePage - 1) * ITEMS_PER_PAGE;
+const paginatedProperties = processedProperties.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
 const resetFilters = () => {
   setSearchQuery("");
@@ -297,6 +310,12 @@ const resetFilters = () => {
           <h2 className="text-xl font-bold text-slate-800 dark:text-slate-300">
             Available Properties ({processedProperties.length})
           </h2>
+          {processedProperties.length > 0 && (
+            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+              Showing {startIndex + 1}–{Math.min(startIndex + ITEMS_PER_PAGE, processedProperties.length)} of{" "}
+              {processedProperties.length}
+            </span>
+          )}
         </div>
 
         {loading ? (
@@ -317,9 +336,54 @@ const resetFilters = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {processedProperties.map((property) => (
+            {paginatedProperties.map((property) => (
               <PropertyCard key={property.id} property={property} />
             ))}
+          </div>
+        )}
+        {totalPages > 1 && (
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+            <button
+              type="button"
+              disabled={safePage === 1}
+              onClick={() => {
+                setCurrentPage((p) => Math.max(1, p - 1));
+                window.scrollTo({ top: 340, behavior: "smooth" });
+              }}
+              className="px-4 py-2 text-sm font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 disabled:opacity-40 hover:border-blue-500 transition"
+            >
+              Previous
+            </button>
+
+            {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNum) => (
+              <button
+                key={pageNum}
+                type="button"
+                onClick={() => {
+                  setCurrentPage(pageNum);
+                  window.scrollTo({ top: 340, behavior: "smooth" });
+                }}
+                className={`w-10 h-10 text-sm font-bold rounded-lg transition ${
+                  safePage === pageNum
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-blue-500"
+                }`}
+              >
+                {pageNum}
+              </button>
+            ))}
+
+            <button
+              type="button"
+              disabled={safePage === totalPages}
+              onClick={() => {
+                setCurrentPage((p) => Math.min(totalPages, p + 1));
+                window.scrollTo({ top: 340, behavior: "smooth" });
+              }}
+              className="px-4 py-2 text-sm font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 disabled:opacity-40 hover:border-blue-500 transition"
+            >
+              Next
+            </button>
           </div>
         )}
       </main>

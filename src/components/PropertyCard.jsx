@@ -1,7 +1,8 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, BedDouble, Bath, Maximize, ArrowUpRight, Images } from "lucide-react";
 
-export default function PropertyCard({ property }) {
+function PropertyCard({ property }) {
   const formatPrice = (price) => {
     return new Intl.NumberFormat("en-IN", {
       style: "currency",
@@ -9,12 +10,17 @@ export default function PropertyCard({ property }) {
       maximumFractionDigits: 0,
     }).format(price);
   };
+
   const coverImage =
     property.images?.[0] ||
     property.imageUrl ||
     "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80";
 
-  const photoCount = Array.isArray(property.images) ? property.images.length : property.imageUrl ? 1 : 0;
+  const photoCount = Array.isArray(property.images)
+    ? property.images.length
+    : property.imageUrl
+    ? 1
+    : 0;
 
   return (
     <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-md transition group flex flex-col">
@@ -22,22 +28,24 @@ export default function PropertyCard({ property }) {
         <img
           src={coverImage}
           alt={property.title}
+          loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
         />
+        <div className="absolute top-3 left-3 flex gap-2">
+          <span className="px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-900/80 text-white backdrop-blur-sm">
+            {property.type}
+          </span>
+          <span className="px-2.5 py-1 text-xs font-semibold rounded-md bg-blue-600 text-white">
+            For {property.category}
+          </span>
+        </div>
 
         {photoCount > 1 && (
           <span className="absolute bottom-3 right-3 px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-900/80 text-white backdrop-blur-sm flex items-center gap-1">
             <Images className="w-3.5 h-3.5" /> {photoCount}
           </span>
         )}
-        <div className="absolute top-3 left-3 flex gap-2">
-          <span className="px-2.5 py-1 text-xs font-semibold rounded-md bg-slate-900/80 dark:bg-blue-600 text-white dark:text-slate-900 backdrop-blur-sm">
-            {property.type}
-          </span>
-          <span className="px-2.5 py-1 text-xs font-semibold rounded-md bg-blue-600 text-white dark:text-slate-900">
-            For {property.category}
-          </span>
-        </div>
       </div>
 
       <div className="p-5 flex-1 flex flex-col justify-between">
@@ -51,7 +59,9 @@ export default function PropertyCard({ property }) {
             </h3>
           </div>
 
-          <h4 className="font-semibold text-slate-800 dark:text-white line-clamp-1 mb-1">{property.title}</h4>
+          <h4 className="font-semibold text-slate-800 dark:text-slate-100 line-clamp-1 mb-1">
+            {property.title}
+          </h4>
 
           <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1 mb-4">
             <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
@@ -78,7 +88,7 @@ export default function PropertyCard({ property }) {
 
           <Link
             to={`/property/${property.id}`}
-            className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-4 bg-slate-900 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white dark:text-slate-900 text-sm font-medium rounded-lg transition"
+            className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-4 bg-slate-900 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-500 text-white text-sm font-medium rounded-lg transition"
           >
             View Details <ArrowUpRight className="w-4 h-4" />
           </Link>
@@ -87,3 +97,5 @@ export default function PropertyCard({ property }) {
     </div>
   );
 }
+
+export default memo(PropertyCard);
